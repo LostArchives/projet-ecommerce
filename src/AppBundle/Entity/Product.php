@@ -304,9 +304,9 @@ class Product
     /**
      * @return $this
      */
-    public function decrementStock()
+    public function decrementStock($quantity = 1)
     {
-        $this->stock--;
+        $this->stock-= $quantity;
 
         return $this;
     }

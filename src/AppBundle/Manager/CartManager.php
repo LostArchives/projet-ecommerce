@@ -100,9 +100,10 @@ class CartManager
     /**
      * Add product to cart if product is available and if stock is enough
      * @param $productId
+     * @param $quantity
      * @throws Exception : Product not found
      */
-    public function addProductToCart($productId)
+    public function addProductToCart($productId, $quantity)
     {
         $productRepository = $this->doctrine->getRepository(Product::class);
         $product = $productRepository->find($productId);
@@ -114,7 +115,11 @@ class CartManager
             throw new Exception('Produit indisponible');
         }
 
-        $product->decrementStock();
+        if ($quantity >= $currentStock) {
+            $product->decrementStock($currentStock);
+        } else {
+            $product->decrementStock($quantity);
+        }
 
         $em = $this->doctrine->getManager();
         $em->persist($product);
@@ -126,7 +131,7 @@ class CartManager
         $currentQty = $cart[$product->getId()] ?? 0;
 
         // Add product into cart (update of quantity)
-        $cart[$product->getId()] = $currentQty + 1;
+        $cart[$product->getId()] = $currentQty + $quantity;
 
         // Update Cart object in session and save session
         $this->session->set('cart', $cart);

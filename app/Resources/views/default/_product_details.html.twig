@@ -4,6 +4,10 @@
     <div>
         <form action="{{ path('add_to_cart') }}" method="post">
             <input type="hidden" name="product_id" value="{{ product.id }}"/>
+            <div class="form-group">
+                <label for="product_quantity">Quantité :</label>
+                <input type="number" name="product_quantity" class="form-control" min="0" max="{{ product.stock }}" value="1">
+            </div>
             <button type="submit" class="btn btn-primary">Add to cart</button>
         </form>
 

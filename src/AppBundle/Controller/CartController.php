@@ -20,11 +20,12 @@ class CartController extends Controller
     public function addToCart(Request $request)
     {
         $productId = $request->get('product_id');
+        $productQuantity = $request->get('product_quantity');
 
         // get the product if exists in return
-        $product = $this->get('app.cart')->addProductToCart($productId);
+        $product = $this->get('app.cart')->addProductToCart($productId, $productQuantity);
 
-        $this->addFlash('info', 'Le produit ' . $product->getName() . ' a bien été ajouté. <a href="' . $this->generateUrl('cart') . '">Voir le panier.</a>');
+        $this->addFlash('info', 'Le produit ' . $product->getName() . ' a bien été ajouté '. $productQuantity . ' fois. <a href="' . $this->generateUrl('cart') . '">Voir le panier.</a>');
 
         return $this->redirectToRoute('product_details', ['id' => $product->getId()]);
     }
