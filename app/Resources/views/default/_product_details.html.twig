@@ -1,8 +1,9 @@
-    <h3><a href="{{ path('product_details', {'id': product.id}) }}">{{ product.name }}</a></h3>
+<h3><a href="{{ path('product_details', {'id': product.id}) }}">{{ product.name }}</a></h3>
 
+{% if product.stock > 0 %}
     <div>
         <form action="{{ path('add_to_cart') }}" method="post">
-            <input type="hidden" name="product_id" value="{{ product.id }}" />
+            <input type="hidden" name="product_id" value="{{ product.id }}"/>
             <button type="submit" class="btn btn-primary">Add to cart</button>
         </form>
 
@@ -11,12 +12,16 @@
             { 'productId': product.id }
         )) }}
     </div>
+{% else %}
+        <div class="alert alert-warning">Produit indisponible</div>
+{% endif %}
+
 
     {% for photo in product.photos %}
-        <img src="{{ photo.path }}" alt="{{ photo.product.name }}" />
+        <img src="{{ photo.path }}" alt="{{ photo.product.name }}"/>
     {% endfor %}
 
-    <ul>
-        <li>Prix HT : {{ product.price|displayPrice }}</li>
-        <li>Prix TTC : {{ priceTTC(product.price) }} €</li>
-    </ul>
+<ul>
+    <li>Prix HT : {{ product.price|displayPrice }}</li>
+    <li>Prix TTC : {{ priceTTC(product.price) }} €</li>
+</ul>
