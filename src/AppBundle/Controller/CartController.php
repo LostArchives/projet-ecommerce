@@ -22,6 +22,9 @@ class CartController extends Controller
         $productId = $request->get('product_id');
         $productQuantity = $request->get('product_quantity');
 
+        if($productQuantity == null)
+            $productQuantity = 1;
+
         // get the product if exists in return
         $product = $this->get('app.cart')->addProductToCart($productId, $productQuantity);
 
