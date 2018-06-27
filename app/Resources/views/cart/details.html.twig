@@ -29,7 +29,9 @@
             <li class="list-group-item d-flex justify-content-between">
                 <span>Total</span>
                 <strong>{{ priceTTC(totalAmount)|displayPrice }}</strong>
-                Vider le panier
+                <form method="post" action="{{ path('clean_cart') }}">
+                    <button class="btn btn-danger" type="submit">Vider le panier</button>
+                </form>
             </li>
         </ul>
 

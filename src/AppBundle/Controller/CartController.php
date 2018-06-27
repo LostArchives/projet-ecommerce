@@ -57,4 +57,19 @@ class CartController extends Controller
 
         return $this->redirectToRoute('cart');
     }
+
+    /**
+     * @Route("/cart/clean", name="clean_cart")
+     * @Method("POST")
+     */
+    public function clearCart()
+    {
+        // Empty the cart session objects
+        $this->get('app.cart')->emptyCart();
+
+        // Tell to user the cart state
+        $this->addFlash('info', 'Le panier a bien été vidé');
+
+        return $this->redirectToRoute('cart');
+    }
 }

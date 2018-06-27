@@ -135,4 +135,35 @@ class CartManager
         // return product to give user information in controller when cart updated
         return $product;
     }
+
+    /**
+     * Empty the Cart session object of user and update before all products stock related to this cart
+     */
+    public function emptyCart()
+    {
+        // Before remove, increment for each product stock used
+        $productRepository = $this->doctrine->getRepository(Product::class);
+        $em = $this->doctrine->getManager();
+
+        // getting cart object in session
+        $cart = $this->session->get('cart');
+
+        // update each product stock
+        foreach ($cart as $id => $qty) {
+            $product = $productRepository->find($id);
+
+            // add provision stock used in cart
+            $product->provisionStock($qty);
+
+            // update object in entity manager
+            $em->persist($product);
+        }
+
+        // flush all updates
+        $em->flush();
+
+        // Initialize cart session object to an empty array and update session
+        $this->session->set('cart', []);
+        $this->session->save();
+    }
 }
