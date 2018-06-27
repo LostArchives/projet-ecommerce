@@ -41,6 +41,7 @@ class CartController extends Controller
 
         return $this->render('cart/details.html.twig', [
             'products' => $display['products'],
+            'most_viewed_products' => $display['most_viewed_products'],
             'totalAmount' => $display['totalAmount'],
         ]);
     }

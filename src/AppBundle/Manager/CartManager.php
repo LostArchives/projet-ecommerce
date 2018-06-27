@@ -2,7 +2,9 @@
 
 namespace AppBundle\Manager;
 
+use AppBundle\Controller\DefaultController;
 use AppBundle\Entity\Product;
+use AppBundle\Repository\ProductRepository;
 use Exception;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -39,6 +41,7 @@ class CartManager
         $productRepository = $this->doctrine->getRepository(Product::class);
 
         $products = [];
+        $mostViewedProducts = [];
         $totalAmount = 0;
 
         foreach ($cart as $id => $quantity) {
@@ -50,8 +53,13 @@ class CartManager
             $totalAmount += $product->getPrice() * $quantity;
         }
 
+        if (count($products) == 0) {
+            $mostViewedProducts = $productRepository->getMostViewedProducts(null,DefaultController::MAX_VIEWED_PRODUCTS);
+        }
+
         return [
             'products' => $products,
+            'most_viewed_products' => $mostViewedProducts,
             'totalAmount' => $totalAmount,
         ];
     }

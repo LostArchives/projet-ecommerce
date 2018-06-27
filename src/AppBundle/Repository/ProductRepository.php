@@ -11,6 +11,8 @@ use AppBundle\Entity\Product;
  */
 class ProductRepository extends \Doctrine\ORM\EntityRepository
 {
+    const NO_EXIST_ID = -1;
+
     /**
      * Returns the N last active products
      *
@@ -38,11 +40,11 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function getMostViewedProducts($product, $limit)
+    public function getMostViewedProducts($product = null, $limit)
     {
         $qb = $this->createQueryBuilder('p')
             ->where('p.id <> :id')
-            ->setParameter('id', $product->getId())
+            ->setParameter('id', $product == null ? ProductRepository::NO_EXIST_ID : $product->getId())
             ->orderBy('p.hits', 'desc')
             ->setMaxResults($limit)
             ->andWhere('p.status = true')

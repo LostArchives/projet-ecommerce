@@ -7,22 +7,23 @@
     </h4>
 
     {% if products is not empty %}
-        
+
         <ul class="list-group mb-3">
 
             {% for element in products %}
 
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
-                <div>
-                    <h6 class="my-0">{{ element.product.name }}</h6>
-                    <small class="text-muted">{{ element.product.description }}</small>
-                </div>
-                <span class="text-muted">{{ priceTTC(element.product.price)|displayPrice }} (qté : {{ element.qty }})</span>
-                <form method="post" action="{{ path('remove_from_cart') }}">
-                    <input type="hidden" name="product_id" value="{{ element.product.id }}" />
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-trash-alt"></i></button>
-                </form>
-            </li>
+                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                    <div>
+                        <h6 class="my-0">{{ element.product.name }}</h6>
+                        <small class="text-muted">{{ element.product.description }}</small>
+                    </div>
+                    <span class="text-muted">{{ priceTTC(element.product.price)|displayPrice }} (qté : {{ element.qty }}
+                        )</span>
+                    <form method="post" action="{{ path('remove_from_cart') }}">
+                        <input type="hidden" name="product_id" value="{{ element.product.id }}"/>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-trash-alt"></i></button>
+                    </form>
+                </li>
 
             {% endfor %}
 
@@ -34,6 +35,26 @@
                 </form>
             </li>
         </ul>
+
+    {% else %}
+
+        <div class="alert alert-warning">
+            <strong>Désolé, votre panier est vide</strong>
+        </div>
+
+        <h2>Les produits les plus vus</h2>
+        <br>
+
+        {% if most_viewed_products is not empty %}
+            <div class="row">
+                {% for product in most_viewed_products %}
+                    <div class="col-md-3">
+                        {% include 'default/_product_details.html.twig' with {'product' : product} %}
+                    </div>
+                {% endfor %}
+            </div>
+
+        {% endif %}
 
     {% endif %}
 
