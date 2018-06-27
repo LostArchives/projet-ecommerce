@@ -138,8 +138,11 @@ class DefaultController extends Controller
 
         $mostViewedProducts = $productRepository->getMostViewedProducts($product, self::MAX_VIEWED_PRODUCTS);
 
-        return $this->render('_show_most_viewed_products.html.twig', [
-            'most_viewed_products' => $mostViewedProducts,
+        $most_viewed_title = $this->get('translator')->trans('product_most_viewed_title');
+
+        return $this->render('_show_lateral_products.html.twig', [
+            'lateral_products' => $mostViewedProducts,
+            'lateral_title' => $most_viewed_title
         ]);
     }
 
@@ -158,8 +161,12 @@ class DefaultController extends Controller
         shuffle($otherProducts);
         $otherProducts = array_slice($otherProducts, null, 2);
 
-        return $this->render('_show_other_products.html.twig', [
-            'other_products' => $otherProducts,
+        // get title for other products
+        $other_products_title = $this->get('translator')->trans('product_most_viewed_title');
+
+        return $this->render('_show_lateral_products.html.twig', [
+            'lateral_products' => $otherProducts,
+            'lateral_title' => $other_products_title
         ]);
     }
 }

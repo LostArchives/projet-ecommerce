@@ -1,9 +1,9 @@
-{% if most_viewed_products is not empty %}
+{% if lateral_products is not empty %}
 
     <div class="my-3 p-3 bg-white rounded box-shadow">
-        <h3 class="border-bottom border-gray pb-2 mb-0">Les produits les plus vus</h3>
+        <h3 class="border-bottom border-gray pb-2 mb-0">{{ lateral_title }}</h3>
 
-        {% for product in most_viewed_products %}
+        {% for product in lateral_products %}
 
             <div class="media text-muted pt-3">
 
@@ -19,16 +19,16 @@
                         {% if product.stock > 0 %}
                             <form action="{{ path('add_to_cart') }}" method="post">
                                 <input type="hidden" name="product_id" value="{{ product.id }}"/>
-                                <button type="submit" class="btn btn-primary">Add to cart</button>
+                                <button type="submit" class="btn btn-primary">{{ 'product_add_to_cart' | trans }}</button>
                             </form>
                         {% else %}
-                            <button type="button" class="btn btn-primary" disabled>Add to cart</button>
+                            <button type="button" class="btn btn-primary" disabled>{{ 'product_add_to_cart' | trans }}</button>
                         {% endif %}
                     </div>
                     {% if product.stock > 0 %}
-                        <span class="d-block">Stock : {{ product.stock }}</span>
+                        <span class="d-block">{{ 'product_stock_information' | trans }} : {{ product.stock }}</span>
                     {% else %}
-                        <span class="d-block" style="color: red"><i>Indisponible</i></span>
+                        <span class="d-block" style="color: red"><i>{{ 'product_stock_empty' | trans }}</i></span>
                     {% endif %}
 
                 </div>

@@ -1,0 +1,13 @@
+product_list: Products list
+category_name: Category %category%
+confirmation_success: Your message was well sent
+change_password: Update your password
+
+# product part
+product_stock_information: Stock
+product_stock_empty: Indisponible
+
+product_most_viewed_title: Most viewed products...
+product_others_same_title: Other products...
+
+product_add_to_cart: Add to cart

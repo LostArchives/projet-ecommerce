@@ -2,3 +2,12 @@ product_list: Liste des produits
 category_name: Catégorie %category%
 confirmation_success: Votre message a bien été envoyé
 change_password: Modifier mon mot de passe
+
+# product part
+product_stock_information: Stock
+product_stock_empty: Indisponible
+
+product_most_viewed_title: Les produits les plus vus...
+product_others_same_title: Les autres produits...
+
+product_add_to_cart: Ajouter au panier
