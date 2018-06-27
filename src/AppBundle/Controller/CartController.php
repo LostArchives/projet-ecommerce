@@ -2,8 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Cart;
-use AppBundle\Entity\CartProduct;
 use AppBundle\Entity\Product;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -21,37 +19,14 @@ class CartController extends Controller
      */
     public function addToCart(Request $request)
     {
-        $productRepository = $this->get('doctrine')->getRepository(Product::class);
-        $product = $productRepository->find($request->get('product_id'));
+        $productId = $request->get('product_id');
 
-        // gestion du stock
-        $currentStock = $product->getStock();
+        // get the product if exists in return
+        $product = $this->get('app.cart')->addProductToCart($productId);
 
-        if ($currentStock === 0) {
-            throw new \Exception('Produit indisponible');
-        }
+        $this->addFlash('info', 'Le produit ' . $product->getName() . ' a bien été ajouté. <a href="' . $this->generateUrl('cart') . '">Voir le panier.</a>');
 
-        $product->decrementStock();
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($product);
-        $em->flush();
-
-        $session = $this->get('session');
-
-        $cart = $session->get('cart');
-
-        $currentQty = $cart[$product->getId()] ?? 0;
-
-        // on ajoute le produit au panier
-        $cart[$product->getId()] = $currentQty + 1;
-
-        $session->set('cart', $cart);
-        $session->save();
-
-        $this->addFlash('info', 'Le produit ' . $product->getName(). ' a bien été ajouté. <a href="'.$this->generateUrl('cart').'">Voir le panier.</a>');
-
-        return $this->redirectToRoute('product_details', ['id' => $product->getId() ]);
+        return $this->redirectToRoute('product_details', ['id' => $product->getId()]);
     }
 
     /**

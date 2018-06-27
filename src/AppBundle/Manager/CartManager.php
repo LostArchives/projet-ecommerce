@@ -3,6 +3,7 @@
 namespace AppBundle\Manager;
 
 use AppBundle\Entity\Product;
+use Exception;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -94,5 +95,44 @@ class CartManager
         }
 
         return $quantity;
+    }
+
+    /**
+     * Add product to cart if product is available and if stock is enough
+     * @param $productId
+     * @throws Exception : Product not found
+     */
+    public function addProductToCart($productId)
+    {
+        $productRepository = $this->doctrine->getRepository(Product::class);
+        $product = $productRepository->find($productId);
+
+        // gestion du stock
+        $currentStock = $product->getStock();
+
+        if ($currentStock === 0) {
+            throw new Exception('Produit indisponible');
+        }
+
+        $product->decrementStock();
+
+        $em = $this->doctrine->getManager();
+        $em->persist($product);
+        $em->flush();
+
+        $cart = $this->session->get('cart');
+
+        // Create new product key if does not exist
+        $currentQty = $cart[$product->getId()] ?? 0;
+
+        // Add product into cart (update of quantity)
+        $cart[$product->getId()] = $currentQty + 1;
+
+        // Update Cart object in session and save session
+        $this->session->set('cart', $cart);
+        $this->session->save();
+
+        // return product to give user information in controller when cart updated
+        return $product;
     }
 }
